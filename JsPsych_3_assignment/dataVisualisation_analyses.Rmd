@@ -1,0 +1,241 @@
+---
+title: "JsPsych Assignment 3"
+output:
+  html_document:
+    df_print: paged
+---
+## Sorting the data into it's conditions (1-4)
+```{r}
+mydata <- read.csv("assignment_dataVis_dataset (1).csv")
+condition_1 <- mydata[1: 142, ]
+condition_2 <- mydata[143:284, ]
+condition_3 <- mydata[285:426, ]
+condition_4 <- mydata[427:568, ]
+```
+
+#Summary Statististics for Each Condition (1-4)
+
+## condition 1: mean, standard deviation, median
+```{r}
+meanx_1 <- mean(condition_1$x)
+meany_1 <- mean(condition_1$y)
+
+print(meanx_1)
+print(meany_1)
+
+sdx_1 <- sd(condition_1$x)
+sdy_1 <- sd(condition_1$y)
+
+print(sdx_1)
+print(sdy_1)
+
+
+medianx_1 <- median(condition_1$x)
+mediany_1 <- median(condition_1$y)
+
+print(medianx_1)
+print(mediany_1)
+
+```
+### mean of x = 54.26327
+### mean of y = 47.83225
+
+### standard deviation of x = 16.76514
+### standard deviation of y = 26.9354
+
+### median of x = 53.3333
+### median of y = 46.0256
+
+
+## condition 2: mean, standard deviation, median
+```{r}
+meanx_2 <- mean(condition_2$x)
+meany_2 <- mean(condition_2$y)
+
+print(meanx_2)
+print(meany_2)
+
+sdx_2 <- sd(condition_2$x)
+sdy_2 <- sd(condition_2$y)
+
+print(sdx_2)
+print(sdy_2)
+
+
+medianx_2 <- median(condition_2$x)
+mediany_2 <- median(condition_2$y)
+
+print(medianx_2)
+print(mediany_2)
+
+```
+### mean of x = 54.26873
+### mean of y = 47.83082
+
+### standard deviation of x = 16.76924
+### standard deviation of y = 26.93573
+
+### median of x = 53.84209
+### median of y = 47.38294
+
+
+## condition 3: mean, standard deviation, median
+```{r}
+meanx_3 <- mean(condition_3$x)
+meany_3 <- mean(condition_3$y)
+
+print(meanx_3)
+print(meany_3)
+
+sdx_3 <- sd(condition_3$x)
+sdy_3 <- sd(condition_3$y)
+
+print(sdx_3)
+print(sdy_3)
+
+
+medianx_3 <- median(condition_3$x)
+mediany_3 <- median(condition_3$y)
+
+print(medianx_3)
+print(mediany_3)
+
+```
+### mean of x = 54.26588
+### mean of y = 47.8315
+
+### standard deviation of x = 16.76885
+### standard deviation of y = 26.93861
+
+### median of x = 54.26135
+### median of y = 45.29224
+
+
+## condition 4: mean, standard deviation, median
+```{r}
+meanx_4 <- mean(condition_4$x)
+meany_4 <- mean(condition_4$y)
+
+print(meanx_4)
+print(meany_4)
+
+sdx_4 <- sd(condition_4$x)
+sdy_4 <- sd(condition_4$y)
+
+print(sdx_4)
+print(sdy_4)
+
+
+medianx_4 <- median(condition_4$x)
+mediany_4 <- median(condition_4$y)
+
+print(medianx_4)
+print(mediany_4)
+
+```
+### mean of x = 54.26734
+### mean of y = 47.83955
+
+### standard deviation of x = 16.76896
+### standard deviation of y = 26.93027
+
+### median of x = 56.53473
+### median of y = 50.11055
+
+#Visualizing Results of Each Section
+
+## Condition 1: x vs.y
+```{r}
+library(ggplot2)
+
+ggplot(condition_1, aes(x, y)) +
+  geom_point() +
+  geom_hline(yintercept=meany_1) +
+  geom_vline(xintercept=meanx_1)
+
+```
+#### the vertical line is the mean of x for condition 1, the horizontal line is the mean of y for condition 1
+
+## Condition 2: x vs.y
+```{r}
+ggplot(condition_2, aes(x, y)) +
+  geom_point() +
+  geom_hline(yintercept=meany_2) +
+  geom_vline(xintercept=meanx_2)
+```
+#### the vertical line is the mean of x for condition 2, the horizontal line is the mean of y for condition 2
+
+## Condition 3: x vs.y
+```{r}
+ggplot(condition_3, aes(x, y)) +
+  geom_point() +
+  geom_hline(yintercept=meany_3) +
+  geom_vline(xintercept=meanx_3)
+```
+#### the vertical line is the mean of x for condition 3, the horizontal line is the mean of y for condition 3
+
+## Condition 4: x vs.y
+```{r}
+ggplot(condition_4, aes(x, y)) +
+  geom_point() +
+  geom_hline(yintercept=meany_4) +
+  geom_vline(xintercept=meanx_4)
+```
+#### the vertical line is the mean of x for condition 4, the horizontal line is the mean of y for condition 4
+
+## Conditions vs. Mean of "x"
+```{r}
+conditions <- c("condition 1", "condition 2", "condition 3", "condition 4")
+
+means_x <- c(meanx_1, meanx_2, meanx_3, meanx_4)
+means_y <- c(meany_1, meany_2, meany_3, meany_4)
+
+mean_data_x <- data.frame(
+  conditions <- c("condition 1", "condition 2", "condition 3", "condition 4"),
+  means_x <- c(meanx_1, meanx_2, meanx_3, meanx_4)
+  )
+
+library(ggplot2)
+ggplot(mean_data_x, aes(x=conditions, y=means_x)) +
+  geom_bar(stat="identity", fill="steelblue") +
+  labs(title="Mean of x for Each Condition",
+       x = "Condition",
+       y = "Mean of x")
+
+```
+
+## Conditions vs. Mean of "y"
+```{r}
+
+mean_data_y <- data.frame(
+  conditions <- c("condition 1", "condition 2", "condition 3", "condition 4"),
+  means_y <- c(meany_1, meany_2, meany_3, meany_4)
+  )
+
+library(ggplot2)
+ggplot(mean_data_y, aes(x=conditions, y=means_y)) +
+  geom_bar(stat="identity", fill="steelblue") +
+  labs(title="Mean of y for Each Condition",
+       x = "Condition",
+       y = "Mean of y") 
+
+```
+# Discussion on Dataset and Graphs
+
+#### What can be concluded from the dataset?
+##### The data set regarding its conditions have almost identical means for x and y values for each condition. As seen in the scatter plot graphs, each condition is very different in their trends. It does not look like there is a clear trend for any of the conditions, but the data for those conditions each form a different image, I noticed. 
+
+##### condition 1: dinosaur image
+##### condition 2: small circle inside of larger circle -> bullseye like
+##### condition 3: 5 (~equally long) positive sloped lines, that follows a negative trend (as x increases, y decreases)
+##### condition 4: star
+
+#### What did you find most challenging about this assignment?
+##### What I found most challenging about this assignment was figuring out what graphs would be best used to describe what was going on in the data. For the graphs that describe the x data and y data for each condition, I am glad that I landed on using a scatterplot graph to describe the data. As I got to see the fun pictures! I did find it difficult to figure out how to get the code to work to do what I wanted it to do. I decided to add a vertical and a horizontal line to show the mean of x and y for each condition.
+
+#### What did you learn in completing this assignment? What are you still curious about?
+##### I learned that certain types of graphs better show what is going on in the data compared to other graphs. For instance, which isn't demonstrated in this notebook, was that initially to describe the x data and y data for each condition I made a line graph using geom_line instead of geom_point. This caused the graph to look messy and honestly not meaningful. So I decided to try a scatterplot graph to reduce the messiness and see what was going on in the data, and as said abcouldable to see the images. Therefore I learned that some graphs represent data better and are more meaningful than other graphs. 
+
+#### Why is it important to visualize data?
+##### It is important to visualize data as it can help the data be better understood and interpreted, as opposed to just looking at the raw data. 
+
