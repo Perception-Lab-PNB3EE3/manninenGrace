@@ -1,0 +1,380 @@
+---
+title: "analysis code"
+author: "Grace Manninen"
+date: "2025-03-24"
+output: html_document
+---
+loading in packages/libraries
+```{r}
+library(dplyr)
+library(stringr)
+library(jsonlite)
+```
+
+
+loading in data 
+```{r}
+#LOAD IN DATA
+# Block 1 data: data 1: This data looks at charismatic - likert - scary - likert 
+# Block 2 data: data 2: This data looks at fixation cross - scary - likert
+
+data1 <- read.csv("graces_simulateddata_analysis.csv")
+data2 <- read.csv("fixation-scary.csv")
+```
+
+data 1
+```{r}
+#inspect the data 
+class(data1)
+#"data.frame"
+
+#getting image rows and extacting file names
+image_rows1 <- grep("<img src=", data1$stimulus)
+print(image_rows1) 
+#5  7  9 11 13 15 17 19 21 23 25 27 29 31 33 35
+
+image_filenames1 <- gsub('.*<img src=\\"|\\\".*', '', data1$stimulus[image_rows1])
+print(image_filenames1) 
+# [1] "charismatic/wolf.jpg"        "scary/wasp.jpg"             
+# [3] "charismatic/zebra.jpg"       "scary/snake.jpg"            
+# [5] "charismatic/elephant.jpg"    "scary/cockroach.jpg"        
+# [7] "charismatic/cheetah.jpeg"    "scary/bull.jpg"             
+# [9] "charismatic/lion.jpg"        "scary/roundworm.png"        
+# [11] "charismatic/giant_panda.jpg" "scary/maggot.jpg"           
+# [13] "charismatic/gorilla.jpg"     "scary/tapeworm.jpg"         
+# [15] "charismatic/tiger.jpg"       "scary/spider.jpg"      
+
+#because likert responses follow image file... to identify likert responses
+
+likert_rows1 <- image_rows1 + 1
+print(likert_rows1)
+#6  8 10 12 14 16 18 20 22 24 26 28 30 32 34 36
+
+funny <- str_extract(data1$response[likert_rows1], '"funny":([0-5])') %>%
+  str_remove('"funny":') %>% as.integer()
+
+motherly <- str_extract(data1$response[likert_rows1], '"motherly":([0-5])') %>%
+  str_remove('"motherly":') %>% as.integer()
+
+friendly <- str_extract(data1$response[likert_rows1], '"friendly":([0-5])') %>%
+  str_remove('"friendly":') %>% as.integer()
+
+cute <- str_extract(data1$response[likert_rows1], '"cute":([0-5])') %>%
+  str_remove('"cute":') %>% as.integer()
+
+protective <- str_extract(data1$response[likert_rows1], '"protective":([0-5])') %>%
+  str_remove('"protective":') %>% as.integer()
+
+help <- str_extract(data1$response[likert_rows1], '"help":([0-5])') %>%
+  str_remove('"help":') %>% as.integer()
+
+image_likert_df <- data.frame(
+  Image = image_filenames1,
+  Funny = funny,
+  Motherly = motherly,
+  Friendly = friendly,
+  Cute = cute,
+  Protective = protective,
+  Help = help
+)
+
+print(image_likert_df)
+
+scary_images <- image_likert_df[grepl("scary", image_likert_df$Image), ]
+print(scary_images)
+
+#now scary_images displays a table that shows the scary animals with their corresponding likert scale responses
+
+```
+
+data 2
+```{r}
+#view data
+head(data2)
+colnames(data2)
+
+#clean data, take out fixation cross data
+stimulus_rows <- grep("<div style=\"font-size:60px;\">\\+<\\/div>", data2$stimulus)
+data_clean2 <- data2[-stimulus_rows, ]
+head(data_clean2)
+
+#extracting file names
+image_rows2 <- grep("<img src=", data_clean2$stimulus)
+image_filenames2 <- gsub('.*<img src=\\"|\\\".*', '', data_clean2$stimulus[image_rows2])
+print(image_filenames2)
+
+#because likert responses follow image file... to identify likert responses
+
+likert_rows2 <- image_rows2 + 1
+print(likert_rows2)
+
+head(data_clean2$response[likert_rows2])
+
+likert_responses2 <- lapply(data_clean2$response[likert_rows2], fromJSON)
+##going to check some rows of likert response corresponding to the image
+
+print(likert_responses2[[1]]) #roundworm - matches
+print(likert_responses2[[2]]) #tapeworm - matches
+print(likert_responses2[[3]]) #maggot - matches
+#... looks good
+
+data_combined2 <- data.frame(
+  Image = image_filenames2,
+  Funny = sapply(likert_responses2, function(x) x$funny),
+  Motherly = sapply(likert_responses2, function(x) x$motherly),
+  Friendly = sapply(likert_responses2, function(x) x$friendly),
+  Cute = sapply(likert_responses2, function(x) x$cute),
+  Protective = sapply(likert_responses2, function(x) x$protective),
+  Help = sapply(likert_responses2, function(x) x$help),
+  stringsAsFactors = FALSE
+)
+
+```
+
+now the data is sorted and cleaned
+check once more before analysis
+```{r}
+#data1 
+data1table <- scary_images
+print(data1table)
+
+#data2
+data2table <- data_combined2
+print(data2table)
+```
+
+I have clean and organized table's of data that has the information I want to compare block 1 and block 2
+
+To run the Mann-Whitney U test, participants data that has N/A values or unanswered questions will be discarded. Also partcipants data that has the same answer put in a row will be discarded. Enough sets of **complete (from the above criteria) data for each block (n=44) will need to be collected. 
+
+Each data set, will go through the above (respective if they are block 1 or block 2), to get rid of unnecessary data collected, to prepare for the inferential tests. 
+
+To prepare for the Mann-Whitney U test
+
+HYPOTHESIS: 
+H0 (null hypothesis): Block 1 and Block 2 will not have a significant difference, failing to reject the null hypothesis
+H1 (alternative hypothesis): Block 1 and Block 2 will be significantly different, rejecting the null hypothesis
+
+creating a new data frame
+- to simplify it: it will include simulated data where there is going to be an assumed effect of serial dependence. There will be no missing data (no N/A). 
+```{r}
+datafinal <- data.frame(
+  participantID = 1:88,
+  condition = rep(c("Block1", "Block2"), each=44),
+  funny = rep(0, each=88),
+  cute = rep(0, each=88),
+  friendly = rep(0, each = 88),
+  help = rep(0, each=88),
+  motherly = rep(0, each=88),
+  protective = rep(0, each=88),
+  overall=rep(0, each=88)
+)
+```
+
+[reminder that this simulated data for block 1 and block 2 is participants average for what they scored for each likert scale question, for all of the stimuli (scary images)]
+
+block 1 -> should have a range of 1:5 for the responses, since assuming an effect of serial dependence, charismatic stimuli will cause scary stimuli to be more liked
+
+block 2 -> should have a smaller and lower range, 1:4, for the responses, since assuming there will not be an effect of serial dependence, since fixation cross stimuli (control) is being shown instead of charismatic animal stimuli
+
+FUNNY -> making simulated data to show my expected effect of serial dependence
+```{r}
+
+#SIMULATE FUNNY DATA
+datafinal$funny[datafinal$condition=="Block1"] <- sample(1:5, 44, replace=TRUE)
+
+#assuming bc of block 2, nnot seeing charismatic -> should have a lower average score (no serial dependence), only 1:4
+
+datafinal$funny[datafinal$condition=="Block2"] <- sample(1:4, 44, replace=TRUE)
+
+```
+
+
+CUTE -> making simulated data to show my expected effect of serial dependence
+```{r}
+
+#SIMULATE FUNNY DATA
+datafinal$cute[datafinal$condition=="Block1"] <- sample(1:5, 44, replace=TRUE)
+
+#assuming bc of block 2, not seeing charismatic -> should have a lower average score (no serial dependence), only 1:4
+
+datafinal$cute[datafinal$condition=="Block2"] <- sample(1:4, 44, replace=TRUE)
+
+```
+
+
+FRIENDLY -> making simulated data to show my expected effect of serial dependence
+```{r}
+
+#SIMULATE FUNNY DATA
+datafinal$friendly[datafinal$condition=="Block1"] <- sample(1:5, 44, replace=TRUE)
+
+#assuming bc of block 2, nnot seeing charismatic -> should have a lower average score (no serial dependence), only 1:4
+
+datafinal$friendly[datafinal$condition=="Block2"] <- sample(1:4, 44, replace=TRUE)
+
+```
+
+
+HELP -> making simulated data to show my expected effect of serial dependence
+```{r}
+
+#SIMULATE FUNNY DATA
+datafinal$help[datafinal$condition=="Block1"] <- sample(1:5, 44, replace=TRUE)
+
+#assuming bc of block 2, nnot seeing charismatic -> should have a lower average score (no serial dependence), only 1:4
+
+datafinal$help[datafinal$condition=="Block2"] <- sample(1:4, 44, replace=TRUE)
+
+```
+
+
+MOTHERLY -> making simulated data to show my expected effect of serial dependence
+```{r}
+
+#SIMULATE FUNNY DATA
+datafinal$motherly[datafinal$condition=="Block1"] <- sample(1:5, 44, replace=TRUE)
+
+#assuming bc of block 2, nnot seeing charismatic -> should have a lower average score (no serial dependence), only 1:4
+
+datafinal$motherly[datafinal$condition=="Block2"] <- sample(1:4, 44, replace=TRUE)
+
+```
+
+
+PROTECTIVE -> making simulated data to show my expected effect of serial dependence
+```{r}
+
+#SIMULATE FUNNY DATA
+datafinal$protective[datafinal$condition=="Block1"] <- sample(1:5, 44, replace=TRUE)
+
+#assuming bc of block 2, nnot seeing charismatic -> should have a lower average score (no serial dependence), only 1:4
+
+datafinal$protective[datafinal$condition=="Block2"] <- sample(1:4, 44, replace=TRUE)
+
+```
+
+overall scores for each participant
+```{r}
+datafinal$overall <- rowMeans(datafinal[,3:9])
+```
+
+Planned Analysis:
+Mann-Whitney U test for overall 
+... now I have a table (datafinal) with simulated data, that should show me that block 1 will have higher scores (likert scale question (6), all on a scale of (1-5)), as higher scores mean in general that the animal is in general rated higher (cuter, friendlier, etc).
+
+```{r}
+overall1 <- datafinal$overall[datafinal$condition=="Block1"]
+overall2 <- datafinal$overall[datafinal$condition=="Block2"]
+```
+
+Check what the average is for block 1 vs block 2
+```{r}
+mean(overall1) #3.022727
+mean(overall2) #2.386364
+
+```
+
+the results are what I would have expected, it makes sense that the overall score for block 1 is higher then block 2
+
+but I want to test if this is a significant effect, so I will do a Mann-Whitey U test (Wilcoxon rank-sum test)
+
+OVERALL
+
+```{r}
+wilcox.test(overall1, overall2)
+
+#	Wilcoxon rank sum test with continuity correction
+#data:  overall1 and overall2
+#W = 1540, p-value = 1.656e-06
+#alternative hypothesis: true location shift is not equal to 0
+```
+
+can check other effects too...
+
+FUNNY
+
+```{r}
+funny1 <- datafinal$funny[datafinal$condition=="Block1"]
+funny2 <- datafinal$funny[datafinal$condition=="Block2"]
+
+wilcox.test(funny1, funny2)
+
+#	Wilcoxon rank sum test with continuity correction
+#data:  funny1 and funny2
+#W = 1035, p-value = 0.5695
+#alternative hypothesis: true location shift is not equal to 0
+```
+
+CUTE
+
+```{r}
+cute1 <- datafinal$cute[datafinal$condition=="Block1"]
+cute2 <- datafinal$cute[datafinal$condition=="Block2"]
+
+wilcox.test(cute1, cute2)
+#Wilcoxon rank sum test with continuity correction
+#data:  cute1 and cute2
+#W = 1341, p-value = 0.001484
+#alternative hypothesis: true location shift is not equal to 0
+```
+
+FRIENDLY
+
+```{r}
+friendly1 <- datafinal$friendly[datafinal$condition=="Block1"]
+friendly2 <- datafinal$friendly[datafinal$condition=="Block2"]
+
+wilcox.test(friendly1, friendly2)
+
+#Wilcoxon rank sum test with continuity correction
+#data:  friendly1 and friendly2
+#W = 1319, p-value = 0.002697
+#alternative hypothesis: true location shift is not equal to 0
+```
+
+HELP
+
+```{r}
+help1 <- datafinal$help[datafinal$condition=="Block1"]
+help2 <- datafinal$help[datafinal$condition=="Block2"]
+
+wilcox.test(help1, help2)
+
+#	Wilcoxon rank sum test with continuity correction
+#data:  help1 and help2
+#W = 1155, p-value = 0.1094
+#alternative hypothesis: true location shift is not equal to 0
+```
+
+MOTHERLY
+
+```{r}
+motherly1 <- datafinal$motherly[datafinal$condition=="Block1"]
+motherly2 <- datafinal$motherly[datafinal$condition=="Block2"]
+
+wilcox.test(motherly1, motherly2)
+
+#	Wilcoxon rank sum test with continuity correction
+#data:  motherly1 and motherly2
+#W = 1171.5, p-value = 0.08221
+#alternative hypothesis: true location shift is not equal to 0
+```
+
+PROTECTIVE
+
+```{r}
+protective1 <- datafinal$protective[datafinal$condition=="Block1"]
+protective2 <- datafinal$protective[datafinal$condition=="Block2"]
+
+wilcox.test(protective1, protective2)
+
+#	Wilcoxon rank sum test with continuity correction
+#data:  protective1 and protective2
+#W = 1265.5, p-value = 0.01101
+#alternative hypothesis: true location shift is not equal to 0
+```
+
+
+
+

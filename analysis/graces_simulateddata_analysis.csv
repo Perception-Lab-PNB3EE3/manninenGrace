@@ -1,0 +1,61 @@
+success,timeout,failed_images,failed_audio,failed_video,trial_type,trial_index,time_elapsed,internal_node_id,rt,stimulus,response,question_order
+TRUE,FALSE,[],[],[],preload,0,39,0.0-0.0,,,,
+,,,,,html-keyboard-response,1,1103,0.0-1.0,1064,Welcome to the experiment! Press any key to continue., ,
+,,,,,html-keyboard-response,2,2509,0.0-2.0,1405,"
+    <p> Welcome to the experiment!</p>
+          
+    <p>If you have any animal phobias, please do not continue. 
+    Make sure to look after your mental well-being. 
+          If at any point in the experiment you don't feel well, please feel free to exit the experiment.
+          There will be no penalties for leaving the experiment. </p>
+    <p>
+          Following each stimulus, there will be six questions.
+          The questions will be answered on a Likert scale (Strongly Disagree-Strongly Agree). 
+          </p>
+          <p>Please answer each question honestly.</p>
+          <p>
+          Please press any key to continue
+          </p>
+    ", ,
+,,,,,html-button-response,3,4099,0.0-3.0,1588,"<p> For this experiment we will be collected data of your responses to the Likert scale questions. 
+    If you have any animal phobias, please don't complete The experiment. 
+    You are able to exit out at any time.</p>
+    <p> If you understand, and are okay with your data being used and shared by the 
+    experimenter, click the button below. </p> 
+    <p style=""font-size:48px/p>",0,
+,,,,,html-button-response,4,6792,0.0-4.0,2692,"<img src=""charismatic/wolf.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,5,14570,0.0-5.0,7773,,"{""funny"":4,""motherly"":4,""friendly"":4,""cute"":4,""protective"":4,""help"":4}","[0,1,2,3,4,5]"
+,,,,,html-button-response,6,15837,0.0-6.0,1265,"<img src=""scary/wasp.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,7,22399,0.0-7.0,6560,,"{""funny"":0,""motherly"":0,""friendly"":0,""cute"":0,""protective"":0,""help"":0}","[0,1,2,3,4,5]"
+,,,,,html-button-response,8,24271,0.0-8.0,1868,"<img src=""charismatic/zebra.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,9,30768,0.0-9.0,6495,,"{""funny"":4,""motherly"":4,""friendly"":4,""cute"":4,""protective"":4,""help"":4}","[0,1,2,3,4,5]"
+,,,,,html-button-response,10,33115,0.0-10.0,2346,"<img src=""scary/snake.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,11,40849,0.0-11.0,7732,,"{""funny"":0,""motherly"":0,""friendly"":0,""cute"":0,""protective"":0,""help"":0}","[0,1,2,3,4,5]"
+,,,,,html-button-response,12,44025,0.0-12.0,3173,"<img src=""charismatic/elephant.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,13,102272,0.0-13.0,58245,,"{""funny"":4,""motherly"":4,""friendly"":4,""cute"":4,""protective"":4,""help"":4}","[0,1,2,3,4,5]"
+,,,,,html-button-response,14,103458,0.0-14.0,1181,"<img src=""scary/cockroach.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,15,112087,0.0-15.0,8627,,"{""funny"":0,""motherly"":0,""friendly"":0,""cute"":0,""protective"":0,""help"":0}","[0,1,2,3,4,5]"
+,,,,,html-button-response,16,113684,0.0-16.0,1596,"<img src=""charismatic/cheetah.jpeg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,17,122281,0.0-17.0,8595,,"{""funny"":4,""motherly"":4,""friendly"":4,""cute"":4,""protective"":4,""help"":4}","[0,1,2,3,4,5]"
+,,,,,html-button-response,18,123613,0.0-18.0,1330,"<img src=""scary/bull.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,19,125102,0.0-19.0,1488,,"{""funny"":"""",""motherly"":"""",""friendly"":"""",""cute"":"""",""protective"":"""",""help"":""""}","[0,1,2,3,4,5]"
+,,,,,html-button-response,20,126372,0.0-20.0,1268,"<img src=""charismatic/lion.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,21,133142,0.0-21.0,6768,,"{""funny"":4,""motherly"":4,""friendly"":4,""cute"":4,""protective"":4,""help"":4}","[0,1,2,3,4,5]"
+,,,,,html-button-response,22,134556,0.0-22.0,1413,"<img src=""scary/roundworm.png"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,23,138293,0.0-23.0,3735,,"{""funny"":"""",""motherly"":"""",""friendly"":"""",""cute"":"""",""protective"":"""",""help"":""""}","[0,1,2,3,4,5]"
+,,,,,html-button-response,24,139798,0.0-24.0,1504,"<img src=""charismatic/giant_panda.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,25,147163,0.0-25.0,7363,,"{""funny"":4,""motherly"":4,""friendly"":4,""cute"":4,""protective"":4,""help"":4}","[0,1,2,3,4,5]"
+,,,,,html-button-response,26,148191,0.0-26.0,1026,"<img src=""scary/maggot.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,27,149751,0.0-27.0,1558,,"{""funny"":"""",""motherly"":"""",""friendly"":"""",""cute"":"""",""protective"":"""",""help"":""""}","[0,1,2,3,4,5]"
+,,,,,html-button-response,28,151503,0.0-28.0,1751,"<img src=""charismatic/gorilla.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,29,160765,0.0-29.0,9260,,"{""funny"":4,""motherly"":4,""friendly"":4,""cute"":4,""protective"":4,""help"":4}","[0,1,2,3,4,5]"
+,,,,,html-button-response,30,162035,0.0-30.0,1268,"<img src=""scary/tapeworm.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,31,163636,0.0-31.0,1599,,"{""funny"":"""",""motherly"":"""",""friendly"":"""",""cute"":"""",""protective"":"""",""help"":""""}","[0,1,2,3,4,5]"
+,,,,,html-button-response,32,164879,0.0-32.0,1242,"<img src=""charismatic/tiger.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,33,172460,0.0-33.0,7580,,"{""funny"":4,""motherly"":4,""friendly"":4,""cute"":4,""protective"":4,""help"":4}","[0,1,2,3,4,5]"
+,,,,,html-button-response,34,174165,0.0-34.0,1704,"<img src=""scary/spider.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,35,175485,0.0-35.0,1318,,"{""funny"":"""",""motherly"":"""",""friendly"":"""",""cute"":"""",""protective"":"""",""help"":""""}","[0,1,2,3,4,5]"
+,,,,,html-keyboard-response,36,176520,0.0-36.0,1034,"
+    <p>Thank you for participating in this experiment!</p>
+    <p>Press any key to finish.</p>
+  ", ,

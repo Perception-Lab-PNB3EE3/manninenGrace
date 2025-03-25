@@ -1,0 +1,53 @@
+success,timeout,failed_images,failed_audio,failed_video,trial_type,trial_index,time_elapsed,internal_node_id,rt,stimulus,response,question_order
+TRUE,FALSE,[],[],[],preload,0,576,0.0-0.0,,,,
+,,,,,html-keyboard-response,1,1100,0.0-1.0,523,Welcome to the experiment! Press any key to continue., ,
+,,,,,html-keyboard-response,2,2057,0.0-2.0,957,"
+    <p> Welcome to the experiment!</p>
+          
+    <p>If you have any animal phobias, please do not continue. 
+    Make sure to look after your mental well-being. 
+          If at any point in the experiment you don't feel well, please feel free to exit the experiment.
+          There will be no penalties for leaving the experiment. </p>
+    <p>
+          Following each stimulus, there will be six questions.
+          The questions will be answered on a Likert scale (Strongly Disagree-Strongly Agree). 
+          </p>
+          <p>Please answer each question honestly.</p>
+          <p>
+          Please press any key to continue
+          </p>
+    ", ,
+,,,,,html-button-response,3,3972,0.0-3.0,1913,"<p> For this experiment we will be collected data of your responses to the Likert scale questions. 
+    If you have any animal phobias, please don't complete The experiment. 
+    You are able to exit out at any time.</p>
+    <p> If you understand, and are okay with your data being used and shared by the 
+    experimenter, click the button below. </p> 
+    <p style=""font-size:48px/p>",0,
+,,,,,html-keyboard-response,4,4975,0.0-4.0,null,"<div style=""font-size:60px;"">+</div>",null,
+,,,,,html-button-response,5,7738,0.0-5.0,2762,"<img src=""scary/roundworm.png"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,6,16354,0.0-6.0,8611,,"{""funny"":1,""motherly"":1,""friendly"":1,""cute"":1,""protective"":1,""help"":1}","[0,1,2,3,4,5]"
+,,,,,html-keyboard-response,7,17357,0.0-7.0,null,"<div style=""font-size:60px;"">+</div>",null,
+,,,,,html-button-response,8,20162,0.0-8.0,2803,"<img src=""scary/tapeworm.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,9,30150,0.0-9.0,9986,,"{""funny"":0,""motherly"":0,""friendly"":0,""cute"":0,""protective"":0,""help"":0}","[0,1,2,3,4,5]"
+,,,,,html-keyboard-response,10,31153,0.0-10.0,null,"<div style=""font-size:60px;"">+</div>",null,
+,,,,,html-button-response,11,33908,0.0-11.0,2753,"<img src=""scary/maggot.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,12,68276,0.0-12.0,34365,,"{""funny"":3,""motherly"":2,""friendly"":1,""cute"":2,""protective"":2,""help"":0}","[0,1,2,3,4,5]"
+,,,,,html-keyboard-response,13,69279,0.0-13.0,null,"<div style=""font-size:60px;"">+</div>",null,
+,,,,,html-button-response,14,70537,0.0-14.0,1256,"<img src=""scary/cockroach.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,15,82530,0.0-15.0,11991,,"{""funny"":3,""motherly"":3,""friendly"":2,""cute"":2,""protective"":2,""help"":1}","[0,1,2,3,4,5]"
+,,,,,html-keyboard-response,16,83533,0.0-16.0,null,"<div style=""font-size:60px;"">+</div>",null,
+,,,,,html-button-response,17,86040,0.0-17.0,2505,"<img src=""scary/spider.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,18,114514,0.0-18.0,28471,,"{""funny"":1,""motherly"":1,""friendly"":1,""cute"":1,""protective"":"""",""help"":1}","[0,1,2,3,4,5]"
+,,,,,html-keyboard-response,19,115516,0.0-19.0,null,"<div style=""font-size:60px;"">+</div>",null,
+,,,,,html-button-response,20,118265,0.0-20.0,2748,"<img src=""scary/snake.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,21,131935,0.0-21.0,13669,,"{""funny"":1,""motherly"":3,""friendly"":0,""cute"":2,""protective"":4,""help"":2}","[0,1,2,3,4,5]"
+,,,,,html-keyboard-response,22,132938,0.0-22.0,null,"<div style=""font-size:60px;"">+</div>",null,
+,,,,,html-button-response,23,134297,0.0-23.0,1356,"<img src=""scary/wasp.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,24,144721,0.0-24.0,10421,,"{""funny"":1,""motherly"":2,""friendly"":0,""cute"":1,""protective"":2,""help"":2}","[0,1,2,3,4,5]"
+,,,,,html-keyboard-response,25,145723,0.0-25.0,null,"<div style=""font-size:60px;"">+</div>",null,
+,,,,,html-button-response,26,147589,0.0-26.0,1864,"<img src=""scary/bull.jpg"" style=""max-width: 100%; height: auto;"">",0,
+,,,,,survey-likert,27,164330,0.0-27.0,16755,,"{""funny"":2,""motherly"":3,""friendly"":0,""cute"":2,""protective"":3,""help"":2}","[0,1,2,3,4,5]"
+,,,,,html-keyboard-response,28,165299,0.0-28.0,969,"
+    <p>Thank you for participating in this experiment!</p>
+    <p>Press any key to finish.</p>
+  ", ,
