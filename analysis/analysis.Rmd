@@ -9,8 +9,8 @@ loading in packages/libraries
 library(dplyr)
 library(stringr)
 library(jsonlite)
+library(ggplot2)
 ```
-
 
 loading in data 
 ```{r}
@@ -20,6 +20,9 @@ loading in data
 
 data1 <- read.csv("graces_simulateddata_analysis.csv")
 data2 <- read.csv("fixation-scary.csv")
+
+#setting seed 
+set.seed(20)
 ```
 
 data 1
@@ -283,12 +286,9 @@ OVERALL
 
 ```{r}
 wilcox.test(overall1, overall2)
-
-#	Wilcoxon rank sum test with continuity correction
-#data:  overall1 and overall2
-#W = 1540, p-value = 1.656e-06
-#alternative hypothesis: true location shift is not equal to 0
 ```
+The difference between the overall scores show significant effects (W = 1533.5, p-value = 2.183e-06
+)
 
 can check other effects too...
 
@@ -299,12 +299,9 @@ funny1 <- datafinal$funny[datafinal$condition=="Block1"]
 funny2 <- datafinal$funny[datafinal$condition=="Block2"]
 
 wilcox.test(funny1, funny2)
-
-#	Wilcoxon rank sum test with continuity correction
-#data:  funny1 and funny2
-#W = 1035, p-value = 0.5695
-#alternative hypothesis: true location shift is not equal to 0
 ```
+The difference between the funny scores show non-significant effects (W = 1078.5, p-value = 0.3481
+)
 
 CUTE
 
@@ -313,11 +310,9 @@ cute1 <- datafinal$cute[datafinal$condition=="Block1"]
 cute2 <- datafinal$cute[datafinal$condition=="Block2"]
 
 wilcox.test(cute1, cute2)
-#Wilcoxon rank sum test with continuity correction
-#data:  cute1 and cute2
-#W = 1341, p-value = 0.001484
-#alternative hypothesis: true location shift is not equal to 0
 ```
+The difference between the cute scores show non-significant effects (W = 1181, p-value = 0.06959
+)
 
 FRIENDLY
 
@@ -326,12 +321,9 @@ friendly1 <- datafinal$friendly[datafinal$condition=="Block1"]
 friendly2 <- datafinal$friendly[datafinal$condition=="Block2"]
 
 wilcox.test(friendly1, friendly2)
-
-#Wilcoxon rank sum test with continuity correction
-#data:  friendly1 and friendly2
-#W = 1319, p-value = 0.002697
-#alternative hypothesis: true location shift is not equal to 0
 ```
+The difference between the friendly scores show significant effects (W = 1243.5, p-value = 0.01899
+)
 
 HELP
 
@@ -340,12 +332,9 @@ help1 <- datafinal$help[datafinal$condition=="Block1"]
 help2 <- datafinal$help[datafinal$condition=="Block2"]
 
 wilcox.test(help1, help2)
-
-#	Wilcoxon rank sum test with continuity correction
-#data:  help1 and help2
-#W = 1155, p-value = 0.1094
-#alternative hypothesis: true location shift is not equal to 0
 ```
+The difference between the help scores show significant effects (W = 1288.5, p-value = 0.006259
+)
 
 MOTHERLY
 
@@ -354,12 +343,9 @@ motherly1 <- datafinal$motherly[datafinal$condition=="Block1"]
 motherly2 <- datafinal$motherly[datafinal$condition=="Block2"]
 
 wilcox.test(motherly1, motherly2)
-
-#	Wilcoxon rank sum test with continuity correction
-#data:  motherly1 and motherly2
-#W = 1171.5, p-value = 0.08221
-#alternative hypothesis: true location shift is not equal to 0
 ```
+The difference between the help scores show significant effects (W = 1277.5, p-value = 0.008229
+)
 
 PROTECTIVE
 
@@ -368,13 +354,114 @@ protective1 <- datafinal$protective[datafinal$condition=="Block1"]
 protective2 <- datafinal$protective[datafinal$condition=="Block2"]
 
 wilcox.test(protective1, protective2)
+```
+The difference between the help scores show non-significant effects (W = 1189.5, p-value = 0.05834
+)
 
-#	Wilcoxon rank sum test with continuity correction
-#data:  protective1 and protective2
-#W = 1265.5, p-value = 0.01101
-#alternative hypothesis: true location shift is not equal to 0
+-------------------------------------------------------------------------------
+data visualization - for block 1 vs block 2
+- making bar graphs for each likert scale question means to compare block 1 and block 2
+- error bars is standard error (upper bound and lower bound)
+
+OVERALL
+```{r}
+overall_means <- data.frame(
+  condition = c("Block1", "Block2"),
+  mean_overall = c(mean(overall1), mean(overall2))
+)
+
+ggplot(overall_means, aes(x = condition, y = mean_overall, fill = condition)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  geom_errorbar(aes(ymin = mean_overall - sd(overall1)/sqrt(length(overall1)), 
+                    ymax = mean_overall + sd(overall2)/sqrt(length(overall2))), width = 0.2) +
+  theme_minimal() +
+  labs(title = "Comparison of Overall Ratings", x = "Condition", y = "Mean Overall Score")
 ```
 
+FUNNY
+```{r}
+funny_means <- data.frame(
+  condition = c("Block1", "Block2"),
+  mean_funny = c(mean(funny1), mean(funny2))
+)
 
+ggplot(funny_means, aes(x = condition, y = mean_funny, fill = condition)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  geom_errorbar(aes(ymin = mean_funny - sd(funny1)/sqrt(length(funny1)), 
+                    ymax = mean_funny + sd(funny2)/sqrt(length(funny2))), width = 0.2) +
+  theme_minimal() +
+  labs(title = "Comparison of Funny Ratings", x = "Condition", y = "Mean Funny Score")
+```
 
+CUTE
+```{r}
+cute_means <- data.frame(
+  condition = c("Block1", "Block2"),
+  mean_cute = c(mean(cute1), mean(cute2))
+)
 
+ggplot(cute_means, aes(x = condition, y = mean_cute, fill = condition)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  geom_errorbar(aes(ymin = mean_cute - sd(funny1)/sqrt(length(funny1)), 
+                    ymax = mean_cute + sd(funny2)/sqrt(length(funny2))), width = 0.2) +
+  theme_minimal() +
+  labs(title = "Comparison of Cute Ratings", x = "Condition", y = "Mean Cute Score")
+```
+
+FRIENDLY
+```{r}
+friendly_means <- data.frame(
+  condition = c("Block1", "Block2"),
+  mean_friendly = c(mean(friendly1), mean(friendly2))
+)
+
+ggplot(friendly_means, aes(x = condition, y = mean_friendly, fill = condition)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  geom_errorbar(aes(ymin = mean_friendly - sd(friendly1)/sqrt(length(friendly1)), 
+                    ymax = mean_friendly + sd(friendly2)/sqrt(length(friendly2))), width = 0.2) +
+  theme_minimal() +
+  labs(title = "Comparison of Friendly Ratings", x = "Condition", y = "Mean Friendly Score")
+```
+HELP
+```{r}
+help_means <- data.frame(
+  condition = c("Block1", "Block2"),
+  mean_help = c(mean(help1), mean(help2))
+)
+
+ggplot(help_means, aes(x = condition, y = mean_help, fill = condition)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  geom_errorbar(aes(ymin = mean_help - sd(help1)/sqrt(length(help1)), 
+                    ymax = mean_help + sd(help2)/sqrt(length(help2))), width = 0.2) +
+  theme_minimal() +
+  labs(title = "Comparison of Help Ratings", x = "Condition", y = "Mean Help Score")
+```
+MOTHERLY
+```{r}
+motherly_means <- data.frame(
+  condition = c("Block1", "Block2"),
+  mean_motherly = c(mean(motherly1), mean(motherly2))
+)
+
+ggplot(motherly_means, aes(x = condition, y = mean_motherly, fill = condition)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  geom_errorbar(aes(ymin = mean_motherly - sd(motherly1)/sqrt(length(motherly1)), 
+                    ymax = mean_motherly + sd(motherly2)/sqrt(length(motherly2))), width = 0.2) +
+  theme_minimal() +
+  labs(title = "Comparison of Motherly Ratings", x = "Condition", y = "Mean Motherly Score")
+```
+
+PROTECTIVE
+```{r}
+protective_means <- data.frame(
+  condition = c("Block1", "Block2"),
+  mean_protective = c(mean(protective1), mean(protective2))
+)
+
+ggplot(protective_means, aes(x = condition, y = mean_protective, fill = condition)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  geom_errorbar(aes(ymin = mean_protective - sd(protective1)/sqrt(length(protective1)), 
+                    ymax = mean_protective + sd(protective2)/sqrt(length(protective2))), width = 0.2) +
+  theme_minimal() +
+  labs(title = "Comparison of Protective Ratings", x = "Condition", y = "Mean Protective Score")
+```
