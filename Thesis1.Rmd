@@ -1,0 +1,97 @@
+---
+title: "Thesis"
+author: "Grace Manninen"
+date: "2025-11-28"
+output: html_document
+---
+Study Design
+
+(Two-tailed)
+H₀: There is no significant difference in species ratings between the music condition and the non-music condition.
+
+H₁: There is a significant difference in species ratings between the music condition and the non-music condition.
+
+2x2 Factor Design - Within-Subjects
+
+Independent Variable:
+1: Music (Two-Levels)
+- music
+- no music
+2: Species (Two-Levels)
+- favoured
+- unfavoured
+
+Dependent Variable
+Likert-Scale Question: “I would want to care for or protect this animal.”
+1 = Strongly disagree
+2 = Disagree
+3 = Somewhat disagree
+4 = Neither agree nor disagree
+5 = Somewhat agree
+6 = Agree
+7 = Strongly agree
+
+POWER ANALYSIS
+```{r}
+install.packages("pwr")
+library(pwr)
+```
+
+alpha = 0.05 (significance threshold)
+beta = 0.80 (power above 80%)
+d = 0.5 (medium effect size)
+
+```{r}
+alpha <- 0.05
+power_target <- 0.8
+d_main <- 0.5
+d_interaction <- 0.2
+```
+
+Main Effect of Music
+```{r}
+power_music <- pwr.t.test(d = d_main,
+                          power = power_target,
+                          sig.level = alpha,
+                          type = "paired",
+                          alternative = "greater")
+
+cat("Main Effect of Music:\n")
+print(power_music)
+cat("\nNumber of participants needed for Music effect:", ceiling(power_music$n), "\n\n")
+
+```
+Number of participants needed for Music effect: 27 - 34 + 
+
+Main Effect of Species
+```{r}
+power_species <- pwr.t.test(d = d_main,
+                          power = power_target,
+                          sig.level = alpha,
+                          type = "paired",
+                          alternative = "greater")
+
+cat("Main Effect of Species:\n")
+print(power_music)
+cat("\nNumber of participants needed for species effect:", ceiling(power_music$n), "\n\n")
+```
+Number of participants needed for species effect: 27 - 34 +
+
+Interaction Effect
+```{r}
+power_interaction <- pwr.t.test(d = d_interaction,
+                                power = power_target,
+                                sig.level = alpha,
+                                type = "paired",
+                                alternative = "two.sided")
+
+cat("Interaction Effect (approximate):\n")
+print(power_interaction)
+cat("\nNumber of participants needed for Interaction effect:", ceiling(power_interaction$n), "\n\n")
+```
+Number of participants needed for Interaction effect: 199
+
+Study should have around 40 participants (34 min)
+
+exclude people who gave same likert scale response, or inadequate responses
+

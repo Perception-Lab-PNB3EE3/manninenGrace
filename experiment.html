@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My experiment</title>
+    
+    <script src="jspsych/jspsych.js"></script>
+    <script src="jspsych/plugin-html-keyboard-response.js"></script>
+    <script src="jspsych/plugin-html-button-response.js"></script>
+    <script src="jspsych/plugin-image-keyboard-response.js"></script>
+    <script src="jspsych/plugin-image-button-response.js"></script>
+    <script src="AVOKE/plugin-audio-visual-response/index.js"></script>
+    <script src="jspsych/plugin-survey-likert.js"></script>
+    <script src="jspsych/plugin-preload.js"></script>
+    
+    <link href="jspsych/jspsych.css" rel="stylesheet" type="text/css" />
+  
+  </head>
+  <body></body>
+  <script>
+    
+    const jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+      }
+    });
+    
+    const timeline = [];
+    
+    const current_block = jsPsych.randomization.shuffle(["block_1","block_2"])[0]
+    console.log("Block ", current_block)
+    
+    var preload = {
+      type: jsPsychPreload,
+      images: [
+        "images/amphibian1.png", "images/amphibian3.png", "images/amphibian4.png",
+        "images/arachnid1.png", "images/arachnid3.png", "images/bivalve1.png", "images/fish15.png",
+        "images/insect2.png", "images/insect3.png", "images/insect8.png", "images/insect13.png",
+        "images/mammal13.png", "images/mammal14.png", "images/mammal16.png", "images/mammal17.png", 
+        "images/mammal19.png", "images/mammal23.png", "images/mammal25.png", "images/mammal31.png", 
+        "images/mammal35.png", "images/mammal34.png"
+      ],
+      audio: ["audio/Test copy.m4a"]
+    };
+    timeline.push(preload);
+      
+    var favouredimages = jsPsych.randomization.shuffle ([
+      "images/mammal17.png",
+      "images/mammal31.png",
+      "images/mammal23.png",
+      "images/mammal16.png",
+      "images/mammal19.png",
+      "images/mammal13.png",
+      "images/mammal14.png",
+      "images/mammal25.png",
+      "images/fish15.png",
+      "images/mammal35.png" 
+    ]);
+    
+    var unfavouredimages = jsPsych.randomization.shuffle([
+      "images/amphibian1.png",
+      "images/amphibian3.png",
+      "images/amphibian4.png",
+      "images/arachnid1.png",
+      "images/arachnid3.png",
+      "images/bivalve1.png",
+      "images/insect2.png",
+      "images/insect3.png",
+      "images/insect8.png",
+      "images/insect13.png"
+    ]);
+    
+    var favouredimages_shuffled = jsPsych.randomization.shuffle(favouredimages)
+    var unfavouredimages_shuffled = jsPsych.randomization.shuffle(unfavouredimages)
+    
+    var favblock_1 = favouredimages_shuffled.slice(0,5);
+    var favblock_2 = favouredimages_shuffled.slice(5);
+    
+    var unfavblock_1 = unfavouredimages_shuffled.slice(0,5);
+    var unfavblock_2 = unfavouredimages_shuffled.slice(5);
+    
+    //Experiment Start
+    const welcomemessage = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: 'Welcome to the experiment! Press any key to begin'
+      };
+      timeline.push(welcomemessage);
+    
+    var instructions = {
+      type: jsPsychHtmlKeyboardResponse,
+      stimulus: `
+      <p>This experiment will take around 10-15 minutes.</p>
+      <p>In this experiment, you will view multiple animals and will be asked to answer one Likert-Scale question for each animal.</p>
+      <p>This study is voluntary, and you can withdraw without penalty at any time. 
+      Please answer every question honestly, and engage fully with the study.</p>
+      <p> If you have specific phobias of animals, please withdraw from the study and take care of your mental health.</p>
+      <p>You will need a stable internet connection and enough battery to run the experiment. 
+      Please take this time to plug your computer into an outlet and ensure you have a stable internet connection.</p>
+      <p>You will also need headphones that can connect to your computer.</p>
+      <p>You need to be able to hear audio and view images.</p>
+      <p>Press any key to begin.</p>
+      `,
+      };
+      timeline.push(instructions);
+
+    var consent = {
+      type: jsPsychHtmlButtonResponse,
+      stimulus: `
+      <p>Data collected: Likert Scale Responses & Button Responses.</p>
+      <p>The experimenter will have access to this data.</p>
+      <p>Your data will not be sold or used for any purpose other than this experiment.</p>
+      <p>The risks of this study are that those with specific phobias to animals may 
+      find some of the stimuli triggering/upsetting.</p>
+      `,
+      choices: ['I agree'],
+      prompt: "<p>Click I Agree if you consent</p>",
+      };
+      timeline.push(consent);
+    
+    var test_image = {
+      type: jsPsychImageButtonResponse,
+      stimulus: "images/mammal34.png",
+      choices: ['Seal', 'Polarbear'],
+      prompt: "<p>What Animal is being displayed?</p>"
+      };
+      timeline.push(test_image);
+    
+    // --- Block 1 (Music) ---
+    // Combine 5 favoured + 5 unfavoured images for this block
+    var block1_image_list = jsPsych.randomization.shuffle(favblock_1.concat(unfavblock_1));
+
+    // Function to create one trial for a given image
+    function createMusicImageTrial(imagePath) {
+    return {
+      type: jsPsychAudioVisualResponse,
+      image_stimulus: imagePath,   // current image
+      audio_stimulus: "audio/Test copy.m4a", // music for this block
+      choices: ["Next"],
+      button_activate_time: 10000,
+      data: {
+        image: imagePath,
+        block: "block_1",
+        music: true
+      }
+      };
+      }
+
+    // Function to create a Likert trial
+    function createLikertTrial() {
+    return {
+      type: jsPsychSurveyLikert,
+      questions: [{
+        prompt: "I would want to care for or protect this animal.",
+        labels: [
+          "Strongly disagree","Disagree","Somewhat disagree",
+          "Neither agree nor disagree","Somewhat agree","Agree","Strongly agree"
+        ],
+        required: true
+      }]
+      };
+      }
+
+    // Add trials to timeline
+  block1_image_list.forEach(function(currentImage) {
+  timeline.push(createMusicImageTrial(currentImage)); // music image trial
+  timeline.push(createLikertTrial());                 // follow-up Likert
+  });
+
+    
+    
+    jsPsych.run(timeline);
+    
+  </script>
+</html>
