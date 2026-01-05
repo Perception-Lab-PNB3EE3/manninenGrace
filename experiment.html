@@ -2,7 +2,6 @@
 <html>
   <head>
     <title>My experiment</title>
-    
     <script src="jspsych/jspsych.js"></script>
     <script src="jspsych/plugin-html-keyboard-response.js"></script>
     <script src="jspsych/plugin-html-button-response.js"></script>
@@ -11,24 +10,30 @@
     <script src="AVOKE/plugin-audio-visual-response/index.js"></script>
     <script src="jspsych/plugin-survey-likert.js"></script>
     <script src="jspsych/plugin-preload.js"></script>
+    <script src="jatos.js"></script>
     
     <link href="jspsych/jspsych.css" rel="stylesheet" type="text/css" />
   
   </head>
   <body></body>
   <script>
+
+const timeline = [];
     
+// Initializing JsPsych
     const jsPsych = initJsPsych({
-      on_finish: function() {
+      on_trial_start = jatos.addAbortButton,
+      on_finish: () => jatos.startNextComponent(jsPsych.data.get().json()),
+      function() {
         jsPsych.data.displayData();
       }
-    });
-    
-    const timeline = [];
-    
-    const current_block = jsPsych.randomization.shuffle(["block_1","block_2"])[0]
-    console.log("Block ", current_block)
-    
+    });    
+
+// Randomizing what condition someone will first go into; music (1) or no music (2)
+    const first_condition= jsPsych.randomization.shuffle(["music","no music"])[0]
+    console.log("First condition Will Be", first_condition)
+
+// Preloading images and music
     var preload = {
       type: jsPsychPreload,
       images: [
@@ -39,10 +44,10 @@
         "images/mammal19.png", "images/mammal23.png", "images/mammal25.png", "images/mammal31.png", 
         "images/mammal35.png", "images/mammal34.png"
       ],
-      audio: ["audio/Test copy.m4a"]
+      audio: ["audio/music.m4a", "audio/silence.m4a"]
     };
-    timeline.push(preload);
-      
+   
+//   Dividing up images between favoured and unfavoured
     var favouredimages = jsPsych.randomization.shuffle ([
       "images/mammal17.png",
       "images/mammal31.png",
@@ -69,22 +74,28 @@
       "images/insect13.png"
     ]);
     
+// Shuffling images
     var favouredimages_shuffled = jsPsych.randomization.shuffle(favouredimages)
     var unfavouredimages_shuffled = jsPsych.randomization.shuffle(unfavouredimages)
+
+//Assign the shuffled list of images to music condition or no music condition
+    var fav_music = favouredimages_shuffled.slice(0,5);
+    var fav_nomusic = favouredimages_shuffled.slice(5);
     
-    var favblock_1 = favouredimages_shuffled.slice(0,5);
-    var favblock_2 = favouredimages_shuffled.slice(5);
+    var unfav_music = unfavouredimages_shuffled.slice(0,5);
+    var unfav_nomusic= unfavouredimages_shuffled.slice(5);
     
-    var unfavblock_1 = unfavouredimages_shuffled.slice(0,5);
-    var unfavblock_2 = unfavouredimages_shuffled.slice(5);
+    // Combine 5 favoured + 5 unfavoured images for a condition
+    var music_image_list = jsPsych.randomization.shuffle(fav_music.concat(unfav_music));
+    var nomusic_image_list = jsPsych.randomization.shuffle(fav_nomusic.concat(unfav_nomusic))
     
-    //Experiment Start
+    //trials
+    
     const welcomemessage = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: 'Welcome to the experiment! Press any key to begin'
       };
-      timeline.push(welcomemessage);
-    
+
     var instructions = {
       type: jsPsychHtmlKeyboardResponse,
       stimulus: `
@@ -100,8 +111,7 @@
       <p>Press any key to begin.</p>
       `,
       };
-      timeline.push(instructions);
-
+      
     var consent = {
       type: jsPsychHtmlButtonResponse,
       stimulus: `
@@ -114,42 +124,48 @@
       choices: ['I agree'],
       prompt: "<p>Click I Agree if you consent</p>",
       };
-      timeline.push(consent);
     
+        
     var test_image = {
       type: jsPsychImageButtonResponse,
       stimulus: "images/mammal34.png",
       choices: ['Seal', 'Polarbear'],
       prompt: "<p>What Animal is being displayed?</p>"
       };
-      timeline.push(test_image);
     
-    // --- Block 1 (Music) ---
-    // Combine 5 favoured + 5 unfavoured images for this block
-    var block1_image_list = jsPsych.randomization.shuffle(favblock_1.concat(unfavblock_1));
-
-    // Function to create one trial for a given image
     function createMusicImageTrial(imagePath) {
     return {
       type: jsPsychAudioVisualResponse,
       image_stimulus: imagePath,   // current image
-      audio_stimulus: "audio/Test copy.m4a", // music for this block
+      audio_stimulus: "audio/music.m4a", // music for this condition
       choices: ["Next"],
-      button_activate_time: 10000,
+      button_activate_time: 1000,
       data: {
         image: imagePath,
-        block: "block_1",
         music: true
+      }      
+      }
+      };
+      
+    function createNoMusicImageTrial(imagePath) {
+    return {
+      type: jsPsychAudioVisualResponse,
+      image_stimulus: imagePath,
+      audio_stimulus: "audio/silence.m4a",
+      choices: ["Next"],
+      button_activate_time: 1000,
+      data: {
+      image: imagePath,
+      music: false
       }
       };
       }
-
-    // Function to create a Likert trial
+      
     function createLikertTrial() {
     return {
       type: jsPsychSurveyLikert,
       questions: [{
-        prompt: "I would want to care for or protect this animal.",
+        prompt: "I would want to care for or protect this species.",
         labels: [
           "Strongly disagree","Disagree","Somewhat disagree",
           "Neither agree nor disagree","Somewhat agree","Agree","Strongly agree"
@@ -157,17 +173,48 @@
         required: true
       }]
       };
-      }
+      };
+      
+    
+  ///Experiment Start
 
-    // Add trials to timeline
-  block1_image_list.forEach(function(currentImage) {
-  timeline.push(createMusicImageTrial(currentImage)); // music image trial
-  timeline.push(createLikertTrial());                 // follow-up Likert
+timeline.push(preload);
+timeline.push(welcomemessage);
+timeline.push(instructions);
+timeline.push(consent);
+timeline.push(test_image)
+    
+
+if (first_condition == "music") {
+
+  music_image_list.forEach(function(currentImage) {
+    timeline.push(createMusicImageTrial(currentImage));
+    timeline.push(createLikertTrial());
   });
 
-    
-    
-    jsPsych.run(timeline);
+  nomusic_image_list.forEach(function(currentImage) {
+    timeline.push(createNoMusicImageTrial(currentImage));
+    timeline.push(createLikertTrial());
+  });
+
+} else {
+
+  nomusic_image_list.forEach(function(currentImage) {
+    timeline.push(createNoMusicImageTrial(currentImage));
+    timeline.push(createLikertTrial());
+  });
+
+  music_image_list.forEach(function(currentImage) {
+    timeline.push(createMusicImageTrial(currentImage));
+    timeline.push(createLikertTrial());
+  });
+
+}
+
+
+ jatos.onLoad (() => {
+   jsPsych.run(timeline);
+ });  
     
   </script>
 </html>
